@@ -9,48 +9,51 @@ import DestroyDomain from "./DestroyDomain";
 import StatusIndicator from "./ui/StatusIndicator";
 import { Domain } from "../types";
 import DataTable from "./ui/Table";
+import FilterDomains from "./FilterDomains";
 
 const { Link } = Typography;
 
 export default function DomainsList() {
   const { data: domains, isLoading, refetch } = useGetDomainsQuery({});
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState<any>([]);
 
-  const formatData = () => {
-    return domains.map((item: Domain) => ({
-      key: item.id,
-      id: item.id,
-      "domin-url": (
-        <div className="flex gap-1 items-baseline">
-          <StatusIndicator isActive={item.isActive} />
-          <span>{item.domain}</span>
-          <Tooltip>
-            <Link type="secondary" href={item.domain} target="_blank">
-              <LinkOutlined />
-            </Link>
-          </Tooltip>
-        </div>
-      ),
-      "created-at": new Date(item.createdDate).toLocaleString(),
-      "active-status": item.isActive ? (
-        <Tag color="success">Active</Tag>
-      ) : (
-        <Tag color="default">Not Active</Tag>
-      ),
-      "verification-status": (
-        <Tag
-          color={
-            item.status === "verified"
-              ? "success"
-              : item.status === "pending"
-              ? "warning"
-              : "error"
-          }
-        >
-          {item.status}
-        </Tag>
-      ),
-    }));
+  const formatData = (data: Domain[]) => {
+    setTableData(
+      data?.map((item: Domain) => ({
+        key: item.id,
+        id: item.id,
+        domin: (
+          <div className="flex gap-1 items-baseline">
+            <StatusIndicator isActive={item.isActive} />
+            <span>{item.domain}</span>
+            <Tooltip>
+              <Link type="secondary" href={item.domain} target="_blank">
+                <LinkOutlined />
+              </Link>
+            </Tooltip>
+          </div>
+        ),
+        createdDate: new Date(item.createdDate).toLocaleString(),
+        isActive: item.isActive ? (
+          <Tag color="success">Active</Tag>
+        ) : (
+          <Tag color="default">Not Active</Tag>
+        ),
+        status: (
+          <Tag
+            color={
+              item.status === "verified"
+                ? "success"
+                : item.status === "pending"
+                ? "warning"
+                : "error"
+            }
+          >
+            {item.status}
+          </Tag>
+        ),
+      }))
+    );
   };
 
   const actionMenuItems = (id: number): MenuProps["items"] => [
@@ -68,23 +71,23 @@ export default function DomainsList() {
   const columns = [
     {
       title: "Domin URL",
-      dataIndex: "domin-url",
-      key: "domin-url",
+      dataIndex: "domin",
+      key: "domin",
     },
     {
       title: "Active Status",
-      dataIndex: "active-status",
-      key: "active-status",
+      dataIndex: "isActive",
+      key: "isActive",
     },
     {
       title: "Verification Status",
-      dataIndex: "verification-status",
-      key: "verification-status",
+      dataIndex: "status",
+      key: "status",
     },
     {
       title: "Created At",
-      dataIndex: "created-at",
-      key: "created-at",
+      dataIndex: "createdDate",
+      key: "createdDate",
     },
 
     {
@@ -103,8 +106,7 @@ export default function DomainsList() {
 
   useEffect(() => {
     if (domains) {
-      const formatedData = formatData();
-      setTableData(formatedData);
+      formatData(domains);
     }
   }, [domains]);
 
@@ -113,11 +115,16 @@ export default function DomainsList() {
       <div className="flex justify-between items-center mb-4">
         <div className="text-xl">Domines</div>
         <div className="flex gap-4 items-center">
-          <SearchDomain data={domains} setTableData={setTableData} />
+          <SearchDomain data={domains} formatData={formatData} />
+          <FilterDomains />
           <CreateDomain callBack={refetch} />
         </div>
       </div>
-      <DataTable loading={isLoading} dataSource={tableData} columns={columns} />
+      <DataTable
+        isLoading={isLoading}
+        dataSource={tableData}
+        columns={columns}
+      />
     </div>
   );
 }
