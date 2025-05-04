@@ -1,21 +1,26 @@
-import { Table, Tag, Button, Space, notification  } from "antd";
+import { Table, Tag, Button, Space, notification } from "antd";
 import { useEffect, useState } from "react";
 import CreateDomain from "./components/CreateDomain";
+import SearchDomain from "./components/SearchDomain";
 
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
+type NotificationType = "success" | "info" | "warning" | "error";
 
 function App() {
+  const [rawData, setRawData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const [api, contextHolder] = notification.useNotification();
 
-  const openNotification = (title : string, msg : string,type: NotificationType) => {
+  const openNotification = (
+    title: string,
+    msg: string,
+    type: NotificationType
+  ) => {
     api[type]({
       message: title,
-      description:
-      msg
+      description: msg,
     });
   };
 
@@ -28,7 +33,7 @@ function App() {
     setIsLoading(false);
 
     const perrtyData = data.map((item: any) => ({
-      "id": item.id,
+      id: item.id,
       "domin-url": item.domain,
       "active-status": item.isActive ? (
         <Tag color="success">Active</Tag>
@@ -49,10 +54,10 @@ function App() {
         </Tag>
       ),
     }));
+    setRawData(perrtyData);
     setTableData(perrtyData);
   };
   useEffect(() => {
-    
     getDomines();
   }, []);
 
@@ -60,22 +65,24 @@ function App() {
     setIsDrawerOpen(false);
   };
 
-  const deleteDomain = async (id : number) => {
+  const deleteDomain = async (id: number) => {
     const res = await fetch(
       `https://6797aa2bc2c861de0c6d964c.mockapi.io/domain/${id}`,
       {
-        method: "DELETE", 
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
       }
     );
+
    
-    if(res.status === 200) {
-      openNotification('Success', 'Domain has successfuly deleted!', 'success')
-      getDomines()
+
+    if (res.status === 200) {
+      openNotification("Success", "Domain has successfuly deleted!", "success");
+      getDomines();
     }
-  }
+  };
 
   const columns = [
     {
@@ -94,11 +101,13 @@ function App() {
       key: "verification-status",
     },
     {
-      title: '',
-      key: 'action',
-      render: (_ : any, record : any) => (
+      title: "",
+      key: "action",
+      render: (_: any, record: any) => (
         <Space size="middle">
-          <Button type="text" danger onClick={() => deleteDomain(record.id)}>Delete</Button>
+          <Button type="text" danger onClick={() => deleteDomain(record.id)}>
+            Delete
+          </Button>
         </Space>
       ),
     },
@@ -107,21 +116,27 @@ function App() {
   return (
     <div>
       {contextHolder}
-      <div className="px-8 py-4 mb-8 border-b border-neutral-300 text-xl font-bold">
+      <div className="sticky top-0 z-50 bg-white/40 backdrop-blur-lg px-8 py-4 mb-8 border-b border-neutral-300 text-xl font-bold">
         DMS
       </div>
-      <div>Domines</div>
-      <Button type="primary" onClick={() => setIsDrawerOpen(true)}>
-        Add Domain
-      </Button>
+      <div  className="w-3/4 mx-auto">
 
-      <CreateDomain isDrawerOpen={isDrawerOpen} onDrawerClose={onDrawerClose} />
+        <div className="flex justify-between items-center mb-4">
+          <div className="text-xl">Domines</div>
+          <div className="flex gap-4 items-center">
+            <SearchDomain data={rawData} setTableData={setTableData} />
+            <Button type="primary" onClick={() => setIsDrawerOpen(true)}>
+              Add Domain
+            </Button>
+          </div>
+        </div>
 
-      <Table loading={isLoading} dataSource={tableData} columns={columns} />
+        <CreateDomain isDrawerOpen={isDrawerOpen} onDrawerClose={onDrawerClose} />
+
+        <Table loading={isLoading} dataSource={tableData} columns={columns} />
+      </div>
     </div>
   );
 }
-
-
 
 export default App;
