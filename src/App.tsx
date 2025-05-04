@@ -3,7 +3,6 @@ import {
   Tag,
   Button,
   Typography,
-  notification,
   Dropdown,
   MenuProps,
   Tooltip,
@@ -17,11 +16,12 @@ import {
   EllipsisOutlined,
   LinkOutlined,
 } from "@ant-design/icons";
+import useCreateNotification from "./hooks/useCreateNotification";
 
-type NotificationType = "success" | "info" | "warning" | "error";
 const { Link } = Typography;
 
 function App() {
+  const { notify, contextHolder } = useCreateNotification();
   const [rawData, setRawData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,25 +34,12 @@ function App() {
     pageSizeOptions: ["5", "10", "20", "50"],
   });
 
-  const [api, contextHolder] = notification.useNotification();
-
   const handleTableChange = (pagination: any) => {
     setTablePagination((prev) => ({
       ...prev,
       current: pagination.current,
       pageSize: pagination.pageSize,
     }));
-  };
-
-  const openNotification = (
-    title: string,
-    msg: string,
-    type: NotificationType
-  ) => {
-    api[type]({
-      message: title,
-      description: msg,
-    });
   };
 
   const getDomines = async () => {
@@ -62,7 +49,6 @@ function App() {
     );
     const data = await res.json();
     setIsLoading(false);
-    console.log(data);
 
     const perrtyData = data.map((item: any) => ({
       id: item.id,
@@ -93,7 +79,7 @@ function App() {
           </Tooltip>
         </div>
       ),
-      "created-at": new Date(item.createdDate * 1000).toLocaleString(),
+      "created-at": new Date(item.createdDate).toLocaleString(),
       "active-status": item.isActive ? (
         <Tag color="success">Active</Tag>
       ) : (
@@ -136,7 +122,11 @@ function App() {
     );
 
     if (res.status === 200) {
-      openNotification("Success", "Domain has successfuly deleted!", "success");
+      notify({
+        type: 'success',
+        message: "Success!",
+        description: "Domain has successfuly deleted!"
+      })
       getDomines();
     }
   };
@@ -202,7 +192,6 @@ function App() {
   return (
     <div>
       {contextHolder}
-
       <div className="">
         <div className="flex justify-between items-center mb-4">
           <div className="text-xl">Domines</div>
@@ -215,6 +204,7 @@ function App() {
         </div>
 
         <CreateDomain
+          refreshFn={getDomines}
           isDrawerOpen={isDrawerOpen}
           onDrawerClose={onDrawerClose}
         />
