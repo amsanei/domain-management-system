@@ -3,13 +3,16 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [tableData, setTableData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const getDomines = async () => {
+      setIsLoading(true);
       const res = await fetch(
         "https://6797aa2bc2c861de0c6d964c.mockapi.io/domain"
       );
       const data = await res.json();
+      setIsLoading(false)
 
       const perrtyData = data.map((item : any) => ({
         "domin-url": item.domain,
@@ -42,7 +45,7 @@ function App() {
       <div className="px-8 py-4 mb-8 border-b border-neutral-300 text-xl font-bold">
         DMS
       </div>
-      <Table dataSource={tableData} columns={columns} />
+      <Table loading={isLoading} dataSource={tableData} columns={columns} />
     </div>
   );
 }
