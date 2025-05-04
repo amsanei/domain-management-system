@@ -31,10 +31,12 @@ function App() {
     );
     const data = await res.json();
     setIsLoading(false);
+    console.log(data);
 
     const perrtyData = data.map((item: any) => ({
       id: item.id,
       "domin-url": item.domain,
+      "created-at": new Date(item.createdDate * 1000).toLocaleString() ,
       "active-status": item.isActive ? (
         <Tag color="success">Active</Tag>
       ) : (
@@ -76,8 +78,6 @@ function App() {
       }
     );
 
-   
-
     if (res.status === 200) {
       openNotification("Success", "Domain has successfuly deleted!", "success");
       getDomines();
@@ -101,6 +101,11 @@ function App() {
       key: "verification-status",
     },
     {
+      title: "Created At",
+      dataIndex: "created-at",
+      key: "created-at",
+    },
+    {
       title: "",
       key: "action",
       render: (_: any, record: any) => (
@@ -119,8 +124,7 @@ function App() {
       <div className="sticky top-0 z-50 bg-white/40 backdrop-blur-lg px-8 py-4 mb-8 border-b border-neutral-300 text-xl font-bold">
         DMS
       </div>
-      <div  className="w-3/4 mx-auto">
-
+      <div className="w-3/4 mx-auto">
         <div className="flex justify-between items-center mb-4">
           <div className="text-xl">Domines</div>
           <div className="flex gap-4 items-center">
@@ -131,7 +135,10 @@ function App() {
           </div>
         </div>
 
-        <CreateDomain isDrawerOpen={isDrawerOpen} onDrawerClose={onDrawerClose} />
+        <CreateDomain
+          isDrawerOpen={isDrawerOpen}
+          onDrawerClose={onDrawerClose}
+        />
 
         <Table loading={isLoading} dataSource={tableData} columns={columns} />
       </div>
