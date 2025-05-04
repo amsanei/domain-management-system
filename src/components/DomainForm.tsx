@@ -7,11 +7,7 @@ export default function DomainForm({ initialValues, onFinish }: any) {
       onFinish={onFinish}
       initialValues={
         initialValues
-          ? {
-              domain: "test",
-              isActive: true,
-              status: "rejected",
-            }
+          ?initialValues
           : {
               isActive: false,
             }

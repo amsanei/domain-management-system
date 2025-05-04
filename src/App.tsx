@@ -17,6 +17,7 @@ import {
   LinkOutlined,
 } from "@ant-design/icons";
 import useCreateNotification from "./hooks/useCreateNotification";
+import EditDomain from "./components/EditDomain";
 
 const { Link } = Typography;
 
@@ -26,6 +27,8 @@ function App() {
   const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
+  const [selectedDomain, setSelectedDomain] = useState(null);
 
   const [tablePagination, setTablePagination] = useState({
     current: 1,
@@ -123,10 +126,10 @@ function App() {
 
     if (res.status === 200) {
       notify({
-        type: 'success',
+        type: "success",
         message: "Success!",
-        description: "Domain has successfuly deleted!"
-      })
+        description: "Domain has successfuly deleted!",
+      });
       getDomines();
     }
   };
@@ -160,7 +163,13 @@ function App() {
           {
             key: "1",
             label: (
-              <button className="flex gap-2 items-center cursor-pointer">
+              <button
+                onClick={() => {
+                  setSelectedDomain(record.id);
+                  setIsEditDrawerOpen(true);
+                }}
+                className="flex gap-2 items-center cursor-pointer"
+              >
                 <EditOutlined />
                 <span>Edit</span>
               </button>
@@ -202,7 +211,12 @@ function App() {
             </Button>
           </div>
         </div>
-
+        <EditDomain
+          isDrawerOpen={isEditDrawerOpen}
+          onDrawerClose={() => setIsEditDrawerOpen(false)}
+          selectedDomain={selectedDomain}
+          refreshFn={getDomines}
+        />
         <CreateDomain
           refreshFn={getDomines}
           isDrawerOpen={isDrawerOpen}
