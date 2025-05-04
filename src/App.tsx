@@ -121,10 +121,8 @@ function App() {
   return (
     <div>
       {contextHolder}
-      <div className="sticky top-0 z-50 bg-white/40 backdrop-blur-lg px-8 py-4 mb-8 border-b border-neutral-300 text-xl font-bold">
-        DMS
-      </div>
-      <div className="w-3/4 mx-auto">
+      
+      <div className="">
         <div className="flex justify-between items-center mb-4">
           <div className="text-xl">Domines</div>
           <div className="flex gap-4 items-center">
