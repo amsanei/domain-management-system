@@ -116,7 +116,7 @@ export default function DomainsList() {
         <div className="text-xl">Domines</div>
         <div className="flex gap-4 items-center">
           <SearchDomain data={domains} formatData={formatData} />
-          <FilterDomains />
+          <FilterDomains data={domains} formatData={formatData} />
           <CreateDomain callBack={refetch} />
         </div>
       </div>
