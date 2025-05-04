@@ -1,13 +1,17 @@
 import { Drawer, FormProps } from "antd";
 import useCreateNotification from "../hooks/useCreateNotification";
 import DomainForm from "./DomainForm";
+import { useCreateDomainMutation } from "../state/domains/domainsApiSlice";
+import { useEffect } from "react";
 
 export default function CreateDomain({
   isDrawerOpen,
   onDrawerClose,
-  refreshFn,
+  callBack,
 }: any) {
-  const { notify } = useCreateNotification();
+  const { notify, contextHolder } = useCreateNotification();
+
+  const [createDomain, { isSuccess }] = useCreateDomainMutation();
 
   type FieldType = {
     domain: string;
@@ -15,36 +19,28 @@ export default function CreateDomain({
     status: string;
   };
 
-  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
-    const res = await fetch(
-      "https://6797aa2bc2c861de0c6d964c.mockapi.io/domain",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          createdDate: Date.now(),
-          domain: values.domain,
-          status: values.status,
-          isActive: values.isActive,
-        }),
-      }
-    );
-    if (res.status === 201) {
+  useEffect(() => {
+    if (isSuccess) {
       notify({
         type: "success",
         message: "Success!",
         description: "You created a new Domain.",
       });
-      refreshFn();
+      callBack();
       onDrawerClose();
     }
+  }, [isSuccess]);
+
+  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    createDomain(values);
   };
 
   return (
-    <Drawer title="Add domain" onClose={onDrawerClose} open={isDrawerOpen}>
-      <DomainForm onFinish={onFinish}/>
-    </Drawer>
+    <>
+      {contextHolder}
+      <Drawer title="Add domain" onClose={onDrawerClose} open={isDrawerOpen}>
+        <DomainForm onFinish={onFinish} />
+      </Drawer>
+    </>
   );
 }

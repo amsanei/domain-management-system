@@ -10,7 +10,7 @@ export default function SearchDomain({ data, setTableData }: any) {
   }, [term]);
 
   const searchData = () => {
-    return data.filter((item: any) => item["domin-url"].includes(term));
+    return data?.filter((item: any) => item["domin-url"].includes(term));
   };
   return <Search value={term} onChange={(e) => setTerm(e.target.value)} />;
 }

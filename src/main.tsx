@@ -11,6 +11,8 @@ import {
 } from "@ant-design/icons";
 
 import UserImage from './assets/user.jpg'
+import { store } from "./state/store.ts";
+import { Provider } from "react-redux";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -56,7 +58,9 @@ createRoot(document.getElementById("root")!).render(
       </div>
       <div className="col-span-10 p-8">
         <div className="bg-white rounded-xl p-4">
-          <App />
+          <Provider store={store}>
+            <App />
+          </Provider>
         </div>
       </div>
     </div>
