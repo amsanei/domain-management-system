@@ -1,9 +1,25 @@
-import { Table, Tag, Button, Space, notification } from "antd";
+import {
+  Table,
+  Tag,
+  Button,
+  Typography,
+  notification,
+  Dropdown,
+  MenuProps,
+  Tooltip,
+} from "antd";
 import { useEffect, useState } from "react";
 import CreateDomain from "./components/CreateDomain";
 import SearchDomain from "./components/SearchDomain";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EllipsisOutlined,
+  LinkOutlined,
+} from "@ant-design/icons";
 
 type NotificationType = "success" | "info" | "warning" | "error";
+const { Link } = Typography;
 
 function App() {
   const [rawData, setRawData] = useState([]);
@@ -11,7 +27,22 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  const [tablePagination, setTablePagination] = useState({
+    current: 1,
+    pageSize: 10,
+    showSizeChanger: true,
+    pageSizeOptions: ["5", "10", "20", "50"],
+  });
+
   const [api, contextHolder] = notification.useNotification();
+
+  const handleTableChange = (pagination: any) => {
+    setTablePagination((prev) => ({
+      ...prev,
+      current: pagination.current,
+      pageSize: pagination.pageSize,
+    }));
+  };
 
   const openNotification = (
     title: string,
@@ -35,8 +66,34 @@ function App() {
 
     const perrtyData = data.map((item: any) => ({
       id: item.id,
-      "domin-url": item.domain,
-      "created-at": new Date(item.createdDate * 1000).toLocaleString() ,
+      "domin-url": (
+        <div className="flex gap-1 items-baseline">
+          {item.isActive ? (
+            <Tooltip title="Active">
+              <span className="relative flex size-2">
+                <span
+                  className="absolute inline-flex h-full w-full animate-ping rounded-full
+                    bg-green-400 opacity-75"
+                ></span>
+                <span className="relative inline-flex size-2 rounded-full bg-green-400"></span>
+              </span>
+            </Tooltip>
+          ) : (
+            <Tooltip title="Not Active">
+              <span className="size-2 bg-neutral-400 rounded-full"></span>
+            </Tooltip>
+          )}
+
+          <div className={`size-2  rounded-full`}></div>
+          <span>{item.domain}</span>
+          <Tooltip>
+            <Link type="secondary" href={item.domain} target="_blank">
+              <LinkOutlined />
+            </Link>
+          </Tooltip>
+        </div>
+      ),
+      "created-at": new Date(item.createdDate * 1000).toLocaleString(),
       "active-status": item.isActive ? (
         <Tag color="success">Active</Tag>
       ) : (
@@ -108,20 +165,44 @@ function App() {
     {
       title: "",
       key: "action",
-      render: (_: any, record: any) => (
-        <Space size="middle">
-          <Button type="text" danger onClick={() => deleteDomain(record.id)}>
-            Delete
-          </Button>
-        </Space>
-      ),
+      render: (_: any, record: any) => {
+        const items: MenuProps["items"] = [
+          {
+            key: "1",
+            label: (
+              <button className="flex gap-2 items-center cursor-pointer">
+                <EditOutlined />
+                <span>Edit</span>
+              </button>
+            ),
+          },
+          {
+            key: "2",
+            danger: true,
+            label: (
+              <button
+                onClick={() => deleteDomain(record.id)}
+                className="flex gap-2 items-center cursor-pointer"
+              >
+                <DeleteOutlined />
+                <span>Delete</span>
+              </button>
+            ),
+          },
+        ];
+        return (
+          <Dropdown trigger={["click"]} menu={{ items }}>
+            <EllipsisOutlined />
+          </Dropdown>
+        );
+      },
     },
   ];
 
   return (
     <div>
       {contextHolder}
-      
+
       <div className="">
         <div className="flex justify-between items-center mb-4">
           <div className="text-xl">Domines</div>
@@ -138,7 +219,13 @@ function App() {
           onDrawerClose={onDrawerClose}
         />
 
-        <Table loading={isLoading} dataSource={tableData} columns={columns} />
+        <Table
+          loading={isLoading}
+          dataSource={tableData}
+          columns={columns}
+          pagination={tablePagination}
+          onChange={handleTableChange}
+        />
       </div>
     </div>
   );
