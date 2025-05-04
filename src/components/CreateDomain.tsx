@@ -1,16 +1,12 @@
-import { Drawer, FormProps } from "antd";
+import { Button, Drawer, FormProps } from "antd";
 import useCreateNotification from "../hooks/useCreateNotification";
 import DomainForm from "./DomainForm";
 import { useCreateDomainMutation } from "../state/domains/domainsApiSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export default function CreateDomain({
-  isDrawerOpen,
-  onDrawerClose,
-  callBack,
-}: any) {
+export default function CreateDomain({ callBack }: { callBack: () => void }) {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { notify, contextHolder } = useCreateNotification();
-
   const [createDomain, { isSuccess }] = useCreateDomainMutation();
 
   type FieldType = {
@@ -27,7 +23,7 @@ export default function CreateDomain({
         description: "You created a new Domain.",
       });
       callBack();
-      onDrawerClose();
+      setIsDrawerOpen(false);
     }
   }, [isSuccess]);
 
@@ -38,7 +34,14 @@ export default function CreateDomain({
   return (
     <>
       {contextHolder}
-      <Drawer title="Add domain" onClose={onDrawerClose} open={isDrawerOpen}>
+      <Button type="primary" onClick={() => setIsDrawerOpen(true)}>
+        Add Domain
+      </Button>
+      <Drawer
+        title="Add domain"
+        onClose={() => setIsDrawerOpen(false)}
+        open={isDrawerOpen}
+      >
         <DomainForm onFinish={onFinish} />
       </Drawer>
     </>

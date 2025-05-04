@@ -1,19 +1,7 @@
-import {
-  Button,
-  Dropdown,
-  MenuProps,
-  Table,
-  Tag,
-  Tooltip,
-  Typography,
-} from "antd";
+import { Dropdown, MenuProps, Table, Tag, Tooltip, Typography } from "antd";
 import { useGetDomainsQuery } from "../state/domains/domainsApiSlice";
 import { useEffect, useState } from "react";
-import {
-  EditOutlined,
-  EllipsisOutlined,
-  LinkOutlined,
-} from "@ant-design/icons";
+import { EllipsisOutlined, LinkOutlined } from "@ant-design/icons";
 import SearchDomain from "./SearchDomain";
 import CreateDomain from "./CreateDomain";
 import EditDomain from "./EditDomain";
@@ -24,12 +12,7 @@ const { Link } = Typography;
 export default function DomainsList() {
   const { data: domains, isLoading, refetch } = useGetDomainsQuery({});
   const [tableData, setTableData] = useState([]);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [selectedDomain, setSelectedDomain] = useState(null);
-  const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
-  const onDrawerClose = () => {
-    setIsDrawerOpen(false);
-  };
+
 
   const [tablePagination, setTablePagination] = useState({
     current: 1,
@@ -73,16 +56,10 @@ export default function DomainsList() {
           {
             key: "1",
             label: (
-              <button
-                onClick={() => {
-                  setSelectedDomain(record.id);
-                  setIsEditDrawerOpen(true);
-                }}
-                className="flex gap-2 items-center cursor-pointer"
-              >
-                <EditOutlined />
-                <span>Edit</span>
-              </button>
+              <EditDomain
+                domainId={record.id}
+                callBack={refetch}
+              />
             ),
           },
           {
@@ -158,23 +135,10 @@ export default function DomainsList() {
         <div className="text-xl">Domines</div>
         <div className="flex gap-4 items-center">
           <SearchDomain data={domains} setTableData={setTableData} />
-          <Button type="primary" onClick={() => setIsDrawerOpen(true)}>
-            Add Domain
-          </Button>
+          <CreateDomain callBack={refetch} />
         </div>
       </div>
 
-      <EditDomain
-        isDrawerOpen={isEditDrawerOpen}
-        onDrawerClose={() => setIsEditDrawerOpen(false)}
-        selectedDomain={selectedDomain}
-        callBack={refetch}
-      />
-      <CreateDomain
-        isDrawerOpen={isDrawerOpen}
-        onDrawerClose={onDrawerClose}
-        callBack={refetch}
-      />
       <Table
         loading={isLoading}
         dataSource={tableData}
