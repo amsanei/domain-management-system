@@ -1,5 +1,6 @@
 import { Table, Tag, Drawer, Button, Input, Space } from "antd";
 import { useEffect, useState } from "react";
+import CreateDomain from "./components/CreateDomain";
 
 function App() {
   const [tableData, setTableData] = useState([]);
@@ -55,21 +56,7 @@ function App() {
         Add Domain
       </Button>
 
-      <Drawer
-        title="Add domain"
-        onClose={onDrawerClose}
-        open={isDrawerOpen}
-        extra={
-          <Space>
-            <Button onClick={onDrawerClose}>Cancel</Button>
-            <Button type="primary" onClick={onDrawerClose}>
-              OK
-            </Button>
-          </Space>
-        }
-      >
-        <Input placeholder="EX: amsanei.github.io" />
-      </Drawer>
+      <CreateDomain isDrawerOpen={isDrawerOpen} onDrawerClose={onDrawerClose} />
 
       <Table loading={isLoading} dataSource={tableData} columns={columns} />
     </div>
