@@ -2,14 +2,15 @@ import { FilterFilled } from "@ant-design/icons";
 import { Button, Checkbox, Drawer, Form, FormProps } from "antd";
 import { useState } from "react";
 import { Domain } from "../types";
+import { useGetDomainsQuery } from "../state/domains/domainsApiSlice";
 
 export default function FilterDomains({
-  data,
-  formatData,
+  callBack,
 }: {
-  data: Domain[];
-  formatData: (data: Domain[]) => void;
+  callBack: (data: Domain[]) => void;
 }) {
+  const { data } = useGetDomainsQuery();
+
   const [isOpen, setIsOpen] = useState(false);
   type FieldType = {
     isActive: string[];
@@ -26,8 +27,8 @@ export default function FilterDomains({
 
       return matchesActive && matchesStatus;
     });
-
-    formatData(filteredData);
+    if(filteredData)
+      callBack(filteredData);
   };
   return (
     <>

@@ -1,26 +1,24 @@
 import { Select } from "antd";
 import { Domain } from "../types";
+import { useGetDomainsQuery } from "../state/domains/domainsApiSlice";
 
 export default function Sort({
-  data,
-  formatData,
+  callBack,
 }: {
-  data: Domain[];
-  formatData: (data: Domain[]) => void;
+  callBack: (data: Domain[]) => void;
 }) {
+  const { data } = useGetDomainsQuery();
   const handleSorting = (e: string) => {
-    console.log(e);
-
-    let sortedData: Domain[] = [];
+    let sortedData: Domain[] | undefined;
     if (e === "alphabet") {
-      sortedData = data.slice().sort((a, b) => {
+      sortedData = data?.slice().sort((a, b) => {
         const titleA = a.domain.toLowerCase();
         const titleB = b.domain.toLowerCase();
         return titleA.localeCompare(titleB);
       });
     } else if (e === "reverseAlphabet") {
       sortedData = data
-        .slice()
+        ?.slice()
         .sort((a, b) => {
           const titleA = a.domain.toLowerCase();
           const titleB = b.domain.toLowerCase();
@@ -28,14 +26,14 @@ export default function Sort({
         })
         .reverse();
     } else if (e === "latest") {
-      sortedData = data.slice().sort((a, b) => {
+      sortedData = data?.slice().sort((a, b) => {
         return (
           new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
         );
       });
     } else if (e === "oldest") {
       sortedData = data
-        .slice()
+        ?.slice()
         .sort((a, b) => {
           return (
             new Date(b.createdDate).getTime() -
@@ -44,8 +42,7 @@ export default function Sort({
         })
         .reverse();
     }
-
-    formatData(sortedData);
+    if (sortedData) callBack(sortedData);
   };
   return (
     <Select

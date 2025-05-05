@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { Domain } from "../../types";
 
 export const domainsApiSlice = createApi({
   reducerPath: "domains",
@@ -7,7 +8,7 @@ export const domainsApiSlice = createApi({
   }),
   endpoints: (builder) => {
     return {
-      getDomains: builder.query({
+      getDomains: builder.query<Domain[], void>({
         query: () => "/domain",
       }),
       getDomain: builder.query({

@@ -1,65 +1,26 @@
-import { Dropdown, MenuProps, Tag, Tooltip, Typography } from "antd";
+import { Dropdown, MenuProps, Typography } from "antd";
 import { useGetDomainsQuery } from "../state/domains/domainsApiSlice";
 import { useEffect, useState } from "react";
-import { EllipsisOutlined, LinkOutlined } from "@ant-design/icons";
+import { EllipsisOutlined } from "@ant-design/icons";
 import SearchDomain from "./SearchDomain";
 import CreateDomain from "./CreateDomain";
 import EditDomain from "./EditDomain";
 import DestroyDomain from "./DestroyDomain";
-import StatusIndicator from "./ui/StatusIndicator";
 import { Domain } from "../types";
 import DataTable from "./ui/Table";
 import FilterDomains from "./FilterDomains";
 import Sort from "./Sort";
+import { formatDomainTableData } from "../utils/formatDomainTableData";
 
-const { Link, Text } = Typography;
+const {  Text } = Typography;
 
 export default function DomainsList() {
-  const { data: domains, isLoading, refetch } = useGetDomainsQuery({});
+  const { data: domains, isLoading, refetch } = useGetDomainsQuery();
   const [tableData, setTableData] = useState<any>([]);
 
   const formatData = (data: Domain[]) => {
-    const sortedData = data?.slice().sort((a, b) => {
-      return (
-        new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
-      );
-    });
-    setTableData(
-      sortedData?.map((item: Domain) => ({
-        key: item.id,
-        id: item.id,
-        domin: (
-          <div className="flex gap-1 items-baseline">
-            <StatusIndicator isActive={item.isActive} />
-            <span>{item.domain}</span>
-            <Tooltip>
-              <Link type="secondary" href={item.domain} target="_blank">
-                <LinkOutlined />
-              </Link>
-            </Tooltip>
-          </div>
-        ),
-        createdDate: new Date(item.createdDate).toLocaleString(),
-        isActive: item.isActive ? (
-          <Tag color="success">Active</Tag>
-        ) : (
-          <Tag color="default">Not Active</Tag>
-        ),
-        status: (
-          <Tag
-            color={
-              item.status === "verified"
-                ? "success"
-                : item.status === "pending"
-                ? "warning"
-                : "error"
-            }
-          >
-            {item.status}
-          </Tag>
-        ),
-      }))
-    );
+    const tableData = formatDomainTableData(data);
+    setTableData(tableData);
   };
 
   const actionMenuItems = (id: number): MenuProps["items"] => [
@@ -121,9 +82,9 @@ export default function DomainsList() {
       <div className="flex flex-col gap-4 md:flex-row justify-between items-center mb-4">
         <Text style={{ fontSize: "1.5rem" }}>Domains</Text>
         <div className="flex flex-wrap md:flex-nowrap gap-4 items-center">
-          <SearchDomain data={domains} formatData={formatData} />
-          <Sort data={domains} formatData={formatData} />
-          <FilterDomains data={domains} formatData={formatData} />
+          <SearchDomain callBack={formatData} />
+          <Sort callBack={formatData} />
+          <FilterDomains callBack={formatData} />
           <CreateDomain callBack={refetch} />
         </div>
       </div>
