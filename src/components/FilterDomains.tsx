@@ -18,14 +18,15 @@ export default function FilterDomains({
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     const filteredData = data?.filter((item: Domain) => {
       const matchesActive =
-        values.isActive.length === 0 ||
+        values.isActive?.length === 0 ||
         values.isActive.includes(item.isActive.toString());
 
       const matchesStatus =
-        values.status.length === 0 || values.status.includes(item.status);
+        values.status?.length === 0 || values.status.includes(item.status);
 
       return matchesActive && matchesStatus;
     });
+
     formatData(filteredData);
   };
   return (
@@ -34,7 +35,13 @@ export default function FilterDomains({
         <FilterFilled />
       </Button>
       <Drawer title="filters" open={isOpen} onClose={() => setIsOpen(false)}>
-        <Form onFinish={onFinish}>
+        <Form
+          onFinish={onFinish}
+          initialValues={{
+            isActive: [],
+            status: [],
+          }}
+        >
           <Form.Item label="Filter by Active status" name="isActive">
             <Checkbox.Group
               options={[
