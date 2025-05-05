@@ -12,7 +12,7 @@ import DataTable from "./ui/Table";
 import FilterDomains from "./FilterDomains";
 import Sort from "./Sort";
 
-const { Link } = Typography;
+const { Link, Text } = Typography;
 
 export default function DomainsList() {
   const { data: domains, isLoading, refetch } = useGetDomainsQuery({});
@@ -119,7 +119,7 @@ export default function DomainsList() {
   return (
     <div>
       <div className="flex flex-col gap-4 md:flex-row justify-between items-center mb-4">
-        <div className="text-xl">Domines</div>
+        <Text style={{ fontSize: "1.5rem" }}>Domains</Text>
         <div className="flex flex-wrap md:flex-nowrap gap-4 items-center">
           <SearchDomain data={domains} formatData={formatData} />
           <Sort data={domains} formatData={formatData} />
