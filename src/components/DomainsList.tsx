@@ -10,6 +10,7 @@ import StatusIndicator from "./ui/StatusIndicator";
 import { Domain } from "../types";
 import DataTable from "./ui/Table";
 import FilterDomains from "./FilterDomains";
+import Sort from "./Sort";
 
 const { Link } = Typography;
 
@@ -18,8 +19,13 @@ export default function DomainsList() {
   const [tableData, setTableData] = useState<any>([]);
 
   const formatData = (data: Domain[]) => {
+    const sortedData = data?.slice().sort((a, b) => {
+      return (
+        new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
+      );
+    });
     setTableData(
-      data?.map((item: Domain) => ({
+      sortedData?.map((item: Domain) => ({
         key: item.id,
         id: item.id,
         domin: (
@@ -116,6 +122,7 @@ export default function DomainsList() {
         <div className="text-xl">Domines</div>
         <div className="flex gap-4 items-center">
           <SearchDomain data={domains} formatData={formatData} />
+          <Sort data={domains} formatData={formatData} />
           <FilterDomains data={domains} formatData={formatData} />
           <CreateDomain callBack={refetch} />
         </div>
