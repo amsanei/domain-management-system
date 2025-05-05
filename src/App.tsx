@@ -1,49 +1,23 @@
-import { Table } from "antd"
+import { useSelector } from "react-redux";
+import DomainsList from "./components/DomainsList";
+import AppLayout from "./components/layout/AppLayout";
+import { ConfigProvider, theme } from "antd";
+import { RootState } from "./state/store";
 
 function App() {
-
+  const appTheme = useSelector((state: RootState) => state.theme);
   return (
-   <div>
-    <div className="px-8 py-4 mb-8 border-b border-neutral-300 text-xl font-bold">
-      DMS
-    </div>
-   <Table dataSource={dataSource} columns={columns} />
-   </div>
-  )
+    <ConfigProvider
+      theme={{
+        algorithm:
+          appTheme.value === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm,
+      }}
+    >
+      <AppLayout className={appTheme.value}>
+        <DomainsList />
+      </AppLayout>
+    </ConfigProvider>
+  );
 }
 
-const dataSource = [
-  {
-    key: '1',
-    name: 'Mike',
-    age: 32,
-    address: '10 Downing Street',
-  },
-  {
-    key: '2',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street',
-  },
-];
-
-
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-  },
-];
-
-export default App
+export default App;
