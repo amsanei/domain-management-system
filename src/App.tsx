@@ -1,10 +1,11 @@
 import DomainsList from "./components/DomainsList";
+import AppLayout from "./components/layout/AppLayout";
 
 function App() {
   return (
-    <div>
+    <AppLayout>
       <DomainsList />
-    </div>
+    </AppLayout>
   );
 }
 

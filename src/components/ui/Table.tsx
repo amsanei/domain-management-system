@@ -17,6 +17,7 @@ export default function DataTable({ isLoading, dataSource, columns }: any) {
   };
   return (
     <Table
+      scroll={{ x: 900 }}
       loading={isLoading}
       dataSource={dataSource}
       columns={columns}

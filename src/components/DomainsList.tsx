@@ -118,9 +118,9 @@ export default function DomainsList() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col gap-4 md:flex-row justify-between items-center mb-4">
         <div className="text-xl">Domines</div>
-        <div className="flex gap-4 items-center">
+        <div className="flex flex-wrap md:flex-nowrap gap-4 items-center">
           <SearchDomain data={domains} formatData={formatData} />
           <Sort data={domains} formatData={formatData} />
           <FilterDomains data={domains} formatData={formatData} />
