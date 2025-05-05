@@ -15,8 +15,10 @@ type FieldType = {
 export default function EditDomain({ domainId, callBack }: any) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { data: info, isLoading } = useGetDomainQuery(domainId);
-  const [updateDomain, { isSuccess: isUpdateSuccess }] =
-    useUpdateDomainMutation({});
+  const [
+    updateDomain,
+    { isSuccess: isUpdateSuccess, isLoading: isUpdatePending },
+  ] = useUpdateDomainMutation({});
 
   const { notify, contextHolder } = useCreateNotification();
 
@@ -57,7 +59,11 @@ export default function EditDomain({ domainId, callBack }: any) {
           {isLoading ? (
             <div>Loading...</div>
           ) : (
-            <DomainForm initialValues={info} onFinish={onFinish} />
+            <DomainForm
+              isPending={isUpdatePending}
+              initialValues={info}
+              onFinish={onFinish}
+            />
           )}
         </Drawer>
       </>

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 export default function CreateDomain({ callBack }: { callBack: () => void }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { notify, contextHolder } = useCreateNotification();
-  const [createDomain, { isSuccess }] = useCreateDomainMutation();
+  const [createDomain, { isSuccess, isLoading }] = useCreateDomainMutation();
 
   type FieldType = {
     domain: string;
@@ -42,7 +42,7 @@ export default function CreateDomain({ callBack }: { callBack: () => void }) {
         onClose={() => setIsDrawerOpen(false)}
         open={isDrawerOpen}
       >
-        <DomainForm onFinish={onFinish} />
+        <DomainForm isPending={isLoading} onFinish={onFinish} />
       </Drawer>
     </>
   );

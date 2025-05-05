@@ -1,13 +1,17 @@
 import { Button, Input, Switch, Form, Select } from "antd";
 
-export default function DomainForm({ initialValues, onFinish }: any) {
+export default function DomainForm({
+  initialValues,
+  onFinish,
+  isPending,
+}: any) {
   return (
     <Form
       layout="vertical"
       onFinish={onFinish}
       initialValues={
         initialValues
-          ?initialValues
+          ? initialValues
           : {
               isActive: false,
             }
@@ -16,7 +20,22 @@ export default function DomainForm({ initialValues, onFinish }: any) {
       <Form.Item
         label="Domain"
         name="domain"
-        rules={[{ required: true, message: "Please enter domain URL" }]}
+        rules={[
+          { required: true, message: "Please enter domain URL" },
+          {
+            validator: (_, value) => {
+              if (
+                !value ||
+                /^https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=]+$/i.test(value)
+              ) {
+                return Promise.resolve();
+              }
+              return Promise.reject(
+                "Please enter a valid URL starting with http:// or https://"
+              );
+            },
+          },
+        ]}
       >
         <Input placeholder="EX: amsanei.github.io" />
       </Form.Item>
@@ -40,7 +59,7 @@ export default function DomainForm({ initialValues, onFinish }: any) {
         />
       </Form.Item>
       <Form.Item label={null}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={isPending}>
           Submit
         </Button>
       </Form.Item>
