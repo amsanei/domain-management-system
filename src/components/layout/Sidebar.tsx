@@ -1,15 +1,20 @@
-
 import UserImage from "../../assets/user.jpg";
+import ThemeSwicher from "../ui/ThemeSwicher";
 import SidebarNav from "./SidebarNav";
 
 export default function Sidebar() {
   return (
-    <div className="hidden md:flex col-span-2 px-4 py-8 flex-col justify-between sticky top-0 max-h-screen">
-      <div className="flex gap-2 items-center border-b border-neutral-200 pb-4 mb-4">
-        <div className="rounded bg-white size-8 shadow flex items-center justify-center">
-          11
+    <div className="hidden md:flex col-span-2 ps-4 py-8 flex-col justify-between sticky top-0 max-h-screen">
+      <div className="flex justify-between items-center border-b border-neutral-200 pb-4 mb-4">
+        <div className="flex gap-2 items-center">
+          <div className="rounded bg-white size-8 shadow flex items-center justify-center">
+            11
+          </div>
+          <div>DMS</div>
         </div>
-        <div>DMS</div>
+        <div>
+          <ThemeSwicher />
+        </div>
       </div>
       <SidebarNav />
       <div className="mt-auto">

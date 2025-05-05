@@ -1,8 +1,9 @@
-import { MenuOutlined, MoonOutlined, SunOutlined } from "@ant-design/icons";
+import { MenuOutlined } from "@ant-design/icons";
 import UserImage from "../../assets/user.jpg";
 import { Button, Drawer } from "antd";
 import { useState } from "react";
 import SidebarNav from "./SidebarNav";
+import ThemeSwicher from "../ui/ThemeSwicher";
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -25,10 +26,7 @@ export default function Header() {
           <Button type="default" shape="circle" onClick={() => setIsOpen(true)}>
             <MenuOutlined />
           </Button>
-          <Button type="default" shape="circle">
-            {1 == 1 ? <SunOutlined /> : <MoonOutlined />}
-          </Button>
-
+          <ThemeSwicher />
           <img
             src={UserImage}
             alt="User Profile pic"
