@@ -30,7 +30,7 @@ export default function DomainsList() {
     setTableData(tableData);
   };
 
-  const actionMenuItems = (id: number): MenuProps["items"] => [
+  const actionMenuItems = (id: number, domain: string): MenuProps["items"] => [
     {
       key: "edit",
       label: <EditDomain domainId={id} callBack={refetch} />,
@@ -38,15 +38,15 @@ export default function DomainsList() {
     {
       key: "delete",
       danger: true,
-      label: <DestroyDomain id={id} callBack={refetch} />,
+      label: <DestroyDomain id={id} domain={domain} callBack={refetch} />,
     },
   ];
 
   const columns = [
     {
-      title: "Domin URL",
-      dataIndex: "domin",
-      key: "domin",
+      title: "Domain",
+      dataIndex: "domain",
+      key: "domain",
     },
     {
       title: "Active Status",
@@ -67,10 +67,10 @@ export default function DomainsList() {
     {
       title: "",
       key: "action",
-      render: (_: any, record: Domain) => (
+      render: (_: any, record: Domain & { domainUrl: string }) => (
         <Dropdown
           trigger={["click"]}
-          menu={{ items: actionMenuItems(record.id) }}
+          menu={{ items: actionMenuItems(record.id, record.domainUrl) }}
         >
           <EllipsisOutlined />
         </Dropdown>

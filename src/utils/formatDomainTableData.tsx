@@ -4,6 +4,8 @@ import { Typography, Tooltip, Tag } from "antd";
 import StatusIndicator from "../components/ui/StatusIndicator";
 
 export const formatDomainTableData = (data: Domain[]) => {
+  console.log(data);
+  
   return data
     ?.slice()
     .sort(
@@ -13,7 +15,8 @@ export const formatDomainTableData = (data: Domain[]) => {
     .map((item) => ({
       key: item.id,
       id: item.id,
-      domin: renderDomainUrlTag(item.isActive, item.domain),
+      domainUrl : item.domain,
+      domain: renderDomainUrlTag(item.isActive, item.domain),
       createdDate: new Date(item.createdDate).toLocaleString(),
       isActive: renderActiveTag(item.isActive),
       status: renderStatusTag(item.status),
