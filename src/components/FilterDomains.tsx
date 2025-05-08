@@ -10,7 +10,7 @@ export default function FilterDomains({
   callBack: (data: Domain[]) => void;
 }) {
   const { data } = useGetDomainsQuery();
-
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   type FieldType = {
     isActive: string[];
@@ -27,17 +27,24 @@ export default function FilterDomains({
 
       return matchesActive && matchesStatus;
     });
-    if(filteredData)
-      callBack(filteredData);
+    if (filteredData) callBack(filteredData);
+    setIsOpen(false);
+  };
+
+  const onValuesChange = (_: any, values: FieldType) => {
+    const isEmpty = values.isActive.length === 0 && values.status.length === 0;
+    setIsSubmitDisabled(isEmpty);
   };
   return (
     <>
       <Button onClick={() => setIsOpen(true)}>
         <FilterFilled />
       </Button>
-      <Drawer title="filters" open={isOpen} onClose={() => setIsOpen(false)}>
+      <Drawer title="Filters" open={isOpen} onClose={() => setIsOpen(false)}>
         <Form
           onFinish={onFinish}
+          layout="vertical"
+          onValuesChange={onValuesChange}
           initialValues={{
             isActive: [],
             status: [],
@@ -61,7 +68,11 @@ export default function FilterDomains({
             />
           </Form.Item>
           <Form.Item label={null}>
-            <Button type="primary" htmlType="submit">
+            <Button
+              type="primary"
+              htmlType="submit"
+              disabled={isSubmitDisabled}
+            >
               Submit
             </Button>
           </Form.Item>
