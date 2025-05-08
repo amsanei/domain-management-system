@@ -6,7 +6,8 @@ import {
   useGetDomainQuery,
   useUpdateDomainMutation,
 } from "../state/domains/domainsApiSlice";
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, LoadingOutlined } from "@ant-design/icons";
+import ErrorBox from "./layout/ErrorBox";
 type FieldType = {
   domain: string;
   isActive: boolean;
@@ -14,10 +15,20 @@ type FieldType = {
 };
 export default function EditDomain({ domainId, callBack }: any) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const { data: info, isLoading } = useGetDomainQuery(domainId);
+  const {
+    data: info,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+  } = useGetDomainQuery(domainId);
   const [
     updateDomain,
-    { isSuccess: isUpdateSuccess, isLoading: isUpdatePending },
+    {
+      isSuccess: isUpdateSuccess,
+      isLoading: isUpdatePending,
+      isError: isUpdateError,
+    },
   ] = useUpdateDomainMutation({});
 
   const { notify, contextHolder } = useCreateNotification();
@@ -33,6 +44,16 @@ export default function EditDomain({ domainId, callBack }: any) {
       callBack();
     }
   }, [isUpdateSuccess]);
+
+  useEffect(() => {
+    if (isUpdateError) {
+      notify({
+        type: "error",
+        message: "Error!",
+        description: "Something went wrong! please try again later.",
+      });
+    }
+  }, [isUpdateError]);
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     updateDomain({ domainId: domainId, newData: values });
@@ -56,8 +77,13 @@ export default function EditDomain({ domainId, callBack }: any) {
           onClose={() => setIsDrawerOpen(false)}
           open={isDrawerOpen}
         >
-          {isLoading ? (
-            <div>Loading...</div>
+          {isLoading || isFetching ? (
+            <div className="flex items-center gap-2">
+              <LoadingOutlined />
+              <span>Loading...</span>
+            </div>
+          ) : isError ? (
+            <ErrorBox action={refetch} />
           ) : (
             <DomainForm
               isPending={isUpdatePending}

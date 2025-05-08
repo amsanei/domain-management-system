@@ -10,7 +10,7 @@ export default function DestroyDomain({
   id: number;
   callBack: () => void;
 }) {
-  const [destroyDomain, { isSuccess }] = useDestroyDomainMutation();
+  const [destroyDomain, { isSuccess, isError }] = useDestroyDomainMutation();
   const { notify, contextHolder } = useCreateNotification();
 
   useEffect(() => {
@@ -23,6 +23,16 @@ export default function DestroyDomain({
       callBack();
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (isError) {
+      notify({
+        type: "error",
+        message: "Error!",
+        description: "Something went wrong! please try again later.",
+      });
+    }
+  }, [isError]);
 
   return (
     <>

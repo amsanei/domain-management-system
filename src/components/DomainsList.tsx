@@ -11,11 +11,18 @@ import DataTable from "./ui/Table";
 import FilterDomains from "./FilterDomains";
 import Sort from "./Sort";
 import { formatDomainTableData } from "../utils/formatDomainTableData";
+import ErrorBox from "./layout/ErrorBox";
 
-const {  Text } = Typography;
+const { Text } = Typography;
 
 export default function DomainsList() {
-  const { data: domains, isLoading, refetch } = useGetDomainsQuery();
+  const {
+    data: domains,
+    isLoading,
+    refetch,
+    isError,
+    isFetching,
+  } = useGetDomainsQuery();
   const [tableData, setTableData] = useState<any>([]);
 
   const formatData = (data: Domain[]) => {
@@ -81,18 +88,24 @@ export default function DomainsList() {
     <div>
       <div className="flex flex-col gap-4 md:flex-row justify-between items-center mb-4">
         <Text style={{ fontSize: "1.5rem" }}>Domains</Text>
-        <div className="flex flex-wrap md:flex-nowrap gap-4 items-center">
-          <SearchDomain callBack={formatData} />
-          <Sort callBack={formatData} />
-          <FilterDomains callBack={formatData} />
-          <CreateDomain callBack={refetch} />
-        </div>
+        {!isError && (
+          <div className="flex flex-wrap md:flex-nowrap gap-4 items-center">
+            <SearchDomain callBack={formatData} />
+            <Sort callBack={formatData} />
+            <FilterDomains callBack={formatData} />
+            <CreateDomain callBack={refetch} />
+          </div>
+        )}
       </div>
-      <DataTable
-        isLoading={isLoading}
-        dataSource={tableData}
-        columns={columns}
-      />
+      {isError ? (
+        <ErrorBox action={refetch} />
+      ) : (
+        <DataTable
+          isLoading={isLoading || isFetching}
+          dataSource={tableData}
+          columns={columns}
+        />
+      )}
     </div>
   );
 }

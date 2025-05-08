@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 export default function CreateDomain({ callBack }: { callBack: () => void }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { notify, contextHolder } = useCreateNotification();
-  const [createDomain, { isSuccess, isLoading }] = useCreateDomainMutation();
+  const [createDomain, { isSuccess, isLoading, isError }] =
+    useCreateDomainMutation();
 
   type FieldType = {
     domain: string;
@@ -26,6 +27,16 @@ export default function CreateDomain({ callBack }: { callBack: () => void }) {
       setIsDrawerOpen(false);
     }
   }, [isSuccess]);
+  
+  useEffect(() => {
+    if (isError) {
+      notify({
+        type: "error",
+        message: "Error!",
+        description: "Something went wrong! please try again later.",
+      });
+    }
+  }, [isError]);
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     createDomain(values);
