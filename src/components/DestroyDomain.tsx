@@ -25,6 +25,7 @@ export default function DestroyDomain({
         message: "Success!",
         description: "Domain has successfuly deleted!",
       });
+      setShowConfirmModal(false);
       callBack();
     }
   }, [isSuccess]);
@@ -36,6 +37,7 @@ export default function DestroyDomain({
         message: "Error!",
         description: "Something went wrong! please try again later.",
       });
+      setShowConfirmModal(false);
     }
   }, [isError]);
 
@@ -50,6 +52,7 @@ export default function DestroyDomain({
           </div>
         }
         open={showConfirmModal}
+        onCancel={() => setShowConfirmModal(false)}
         footer={[
           <Button danger loading={isLoading} onClick={() => destroyDomain(id)}>
             Yes, Delete
