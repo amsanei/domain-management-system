@@ -1,11 +1,9 @@
 import { Domain } from "../types";
-import {  LinkOutlined } from "@ant-design/icons";
+import { LinkOutlined } from "@ant-design/icons";
 import { Typography, Tooltip, Tag } from "antd";
 import StatusIndicator from "../components/ui/StatusIndicator";
 
 export const formatDomainTableData = (data: Domain[]) => {
-  console.log(data);
-  
   return data
     ?.slice()
     .sort(
@@ -15,24 +13,27 @@ export const formatDomainTableData = (data: Domain[]) => {
     .map((item) => ({
       key: item.id,
       id: item.id,
-      domainUrl : item.domain,
+      domainUrl: item.domain,
       domain: renderDomainUrlTag(item.isActive, item.domain),
       createdDate: new Date(item.createdDate).toLocaleString(),
       isActive: renderActiveTag(item.isActive),
       status: renderStatusTag(item.status),
+      isVerified: item.status === "verified",
     }));
 };
 
 const renderDomainUrlTag = (isActive: boolean, domain: string) => {
-  return <div className="flex gap-1 items-baseline">
-    <StatusIndicator isActive={isActive} />
-    <span>{domain}</span>
-    <Tooltip title="Open URL">
-      <Typography.Link type="secondary" href={domain} target="_blank">
-        <LinkOutlined />
-      </Typography.Link>
-    </Tooltip>
-  </div>;
+  return (
+    <div className="flex gap-1 items-baseline">
+      <StatusIndicator isActive={isActive} />
+      <span>{domain}</span>
+      <Tooltip title="Open URL">
+        <Typography.Link type="secondary" href={domain} target="_blank">
+          <LinkOutlined />
+        </Typography.Link>
+      </Tooltip>
+    </div>
+  );
 };
 
 const renderActiveTag = (isActive: boolean) =>

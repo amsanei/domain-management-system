@@ -12,6 +12,7 @@ import FilterDomains from "./FilterDomains";
 import Sort from "./Sort";
 import { formatDomainTableData } from "../utils/formatDomainTableData";
 import ErrorBox from "./layout/ErrorBox";
+import Verify from "./Verify";
 
 const { Text } = Typography;
 
@@ -30,10 +31,19 @@ export default function DomainsList() {
     setTableData(tableData);
   };
 
-  const actionMenuItems = (id: number, domain: string): MenuProps["items"] => [
+  const actionMenuItems = (
+    id: number,
+    isVerified: boolean,
+    domain: string
+  ): MenuProps["items"] => [
     {
       key: "edit",
       label: <EditDomain domainId={id} callBack={refetch} />,
+    },
+    {
+      key: "verifiy",
+      label: <Verify domainId={id} domain={domain} callBack={refetch} />,
+      disabled: isVerified,
     },
     {
       key: "delete",
@@ -63,14 +73,22 @@ export default function DomainsList() {
       dataIndex: "createdDate",
       key: "createdDate",
     },
-
     {
       title: "",
       key: "action",
-      render: (_: any, record: Domain & { domainUrl: string }) => (
+      render: (
+        _: any,
+        record: Domain & { domainUrl: string; isVerified: boolean }
+      ) => (
         <Dropdown
           trigger={["click"]}
-          menu={{ items: actionMenuItems(record.id, record.domainUrl) }}
+          menu={{
+            items: actionMenuItems(
+              record.id,
+              record.isVerified,
+              record.domainUrl
+            ),
+          }}
         >
           <EllipsisOutlined />
         </Dropdown>
