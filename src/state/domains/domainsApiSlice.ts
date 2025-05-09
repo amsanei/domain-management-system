@@ -22,7 +22,7 @@ export const domainsApiSlice = createApi({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            createdDate: Date.now(),
+            createdDate: Date.now() / 1000,
             domain: data.domain,
             status: data.status,
             isActive: data.isActive,
