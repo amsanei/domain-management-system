@@ -1,7 +1,7 @@
 import { CheckSquareOutlined } from "@ant-design/icons";
-import { useUpdateDomainMutation } from "../state/domains/domainsApiSlice";
+import { useUpdateDomainMutation } from "../../state/domains/domainsApiSlice";
 import { useEffect, useState } from "react";
-import useCreateNotification from "../hooks/useCreateNotification";
+import useCreateNotification from "../../hooks/useCreateNotification";
 import { Button, Modal, Typography } from "antd";
 
 export default function Verify({

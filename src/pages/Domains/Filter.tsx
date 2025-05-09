@@ -1,10 +1,10 @@
 import { FilterFilled } from "@ant-design/icons";
 import { Button, Checkbox, Drawer, Form, FormProps } from "antd";
 import { useState } from "react";
-import { Domain } from "../types";
-import { useGetDomainsQuery } from "../state/domains/domainsApiSlice";
+import { Domain } from "../../types";
+import { useGetDomainsQuery } from "../../state/domains/domainsApiSlice";
 
-export default function FilterDomains({
+export default function Filter({
   callBack,
 }: {
   callBack: (data: Domain[]) => void;

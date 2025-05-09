@@ -1,22 +1,22 @@
 import { Dropdown, MenuProps, Typography } from "antd";
-import { useGetDomainsQuery } from "../state/domains/domainsApiSlice";
 import { useEffect, useState } from "react";
 import { EllipsisOutlined } from "@ant-design/icons";
-import SearchDomain from "./SearchDomain";
-import CreateDomain from "./CreateDomain";
-import EditDomain from "./EditDomain";
-import DestroyDomain from "./DestroyDomain";
-import { Domain } from "../types";
-import DataTable from "./ui/Table";
-import FilterDomains from "./FilterDomains";
+import Search from "./Search";
+import Filter from "./Filter";
 import Sort from "./Sort";
-import { formatDomainTableData } from "../utils/formatDomainTableData";
-import ErrorBox from "./layout/ErrorBox";
 import Verify from "./Verify";
+import Create from "./Create";
+import { useGetDomainsQuery } from "../../state/domains/domainsApiSlice";
+import { Domain } from "../../types";
+import { formatDomainTableData } from "../../utils/formatDomainTableData";
+import ErrorBox from "../../components/layout/ErrorBox";
+import DataTable from "../../components/ui/Table";
+import Destroy from "./Destroy";
+import Edit from "./Edit";
 
 const { Text } = Typography;
 
-export default function DomainsList() {
+export default function DomainsPage() {
   const {
     data: domains,
     isLoading,
@@ -27,8 +27,8 @@ export default function DomainsList() {
   const [tableData, setTableData] = useState<any>([]);
 
   const formatData = (data: Domain[]) => {
-    const tableData = formatDomainTableData(data);
-    setTableData(tableData);
+    const newTableData = formatDomainTableData(data);
+    setTableData(newTableData);
   };
 
   const actionMenuItems = (
@@ -38,7 +38,7 @@ export default function DomainsList() {
   ): MenuProps["items"] => [
     {
       key: "edit",
-      label: <EditDomain domainId={id} callBack={refetch} />,
+      label: <Edit domainId={id} callBack={refetch} />,
     },
     {
       key: "verifiy",
@@ -48,7 +48,7 @@ export default function DomainsList() {
     {
       key: "delete",
       danger: true,
-      label: <DestroyDomain id={id} domain={domain} callBack={refetch} />,
+      label: <Destroy id={id} domain={domain} callBack={refetch} />,
     },
   ];
 
@@ -108,10 +108,10 @@ export default function DomainsList() {
         <Text style={{ fontSize: "1.5rem" }}>Domains</Text>
         {!isError && (
           <div className="flex flex-wrap md:flex-nowrap gap-4 items-center">
-            <SearchDomain callBack={formatData} />
+            <Search callBack={formatData} />
             <Sort callBack={formatData} />
-            <FilterDomains callBack={formatData} />
-            <CreateDomain callBack={refetch} />
+            <Filter callBack={formatData} />
+            <Create callBack={refetch} />
           </div>
         )}
       </div>

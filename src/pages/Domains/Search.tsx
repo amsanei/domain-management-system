@@ -1,11 +1,9 @@
 import { Input } from "antd";
 import { useEffect, useState } from "react";
-import { Domain } from "../types";
-import { useGetDomainsQuery } from "../state/domains/domainsApiSlice";
+import { Domain } from "../../types";
+import { useGetDomainsQuery } from "../../state/domains/domainsApiSlice";
 
-const { Search } = Input;
-
-export default function SearchDomain({
+export default function Search({
   callBack,
 }: {
   callBack: (data: Domain[]) => void;
@@ -25,7 +23,7 @@ export default function SearchDomain({
     return data?.filter((item: Domain) => item.domain.includes(term));
   };
   return (
-    <Search
+    <Input.Search
       placeholder="EX: amsanei.github.io"
       value={term}
       onChange={(e) => setTerm(e.target.value)}

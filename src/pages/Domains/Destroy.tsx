@@ -1,10 +1,10 @@
 import { DeleteOutlined, WarningOutlined } from "@ant-design/icons";
-import { useDestroyDomainMutation } from "../state/domains/domainsApiSlice";
+import { useDestroyDomainMutation } from "../../state/domains/domainsApiSlice";
 import { useEffect, useState } from "react";
-import useCreateNotification from "../hooks/useCreateNotification";
+import useCreateNotification from "../../hooks/useCreateNotification";
 import { Button, Modal, Typography } from "antd";
 
-export default function DestroyDomain({
+export default function Destroy({
   id,
   domain,
   callBack,

@@ -1,6 +1,6 @@
 import { Select } from "antd";
-import { Domain } from "../types";
-import { useGetDomainsQuery } from "../state/domains/domainsApiSlice";
+import { Domain } from "../../types";
+import { useGetDomainsQuery } from "../../state/domains/domainsApiSlice";
 
 export default function Sort({
   callBack,
@@ -9,6 +9,7 @@ export default function Sort({
 }) {
   const { data } = useGetDomainsQuery();
   const handleSorting = (e: string) => {
+
     let sortedData: Domain[] | undefined;
     if (e === "alphabet") {
       sortedData = data?.slice().sort((a, b) => {
@@ -16,6 +17,7 @@ export default function Sort({
         const titleB = b.domain.toLowerCase();
         return titleA.localeCompare(titleB);
       });
+      
     } else if (e === "reverseAlphabet") {
       sortedData = data
         ?.slice()
@@ -42,6 +44,8 @@ export default function Sort({
         })
         .reverse();
     }
+    console.log(sortedData);
+    
     if (sortedData) callBack(sortedData);
   };
   return (

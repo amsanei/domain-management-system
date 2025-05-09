@@ -1,19 +1,26 @@
 import { Drawer, FormProps } from "antd";
-import DomainForm from "./DomainForm";
+
 import { useEffect, useState } from "react";
-import useCreateNotification from "../hooks/useCreateNotification";
+import useCreateNotification from "../../hooks/useCreateNotification";
 import {
   useGetDomainQuery,
   useUpdateDomainMutation,
-} from "../state/domains/domainsApiSlice";
+} from "../../state/domains/domainsApiSlice";
 import { EditOutlined, LoadingOutlined } from "@ant-design/icons";
-import ErrorBox from "./layout/ErrorBox";
+import ErrorBox from "../../components/layout/ErrorBox";
+import DomainForm from "../../components/forms/DomainForm";
 type FieldType = {
   domain: string;
   isActive: boolean;
   status: string;
 };
-export default function EditDomain({ domainId, callBack }: any) {
+export default function Edit({
+  domainId,
+  callBack,
+}: {
+  domainId: number;
+  callBack: () => void;
+}) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const {
     data: info,

@@ -4,19 +4,16 @@ import { Typography, Tooltip, Tag } from "antd";
 import StatusIndicator from "../components/ui/StatusIndicator";
 
 export const formatDomainTableData = (data: Domain[]) => {
-  return data
-    ?.slice()
-    .sort((a, b) => Number(b.createdDate) - Number(a.createdDate))
-    .map((item) => ({
-      key: item.id,
-      id: item.id,
-      domainUrl: item.domain,
-      domain: renderDomainUrlTag(item.isActive, item.domain),
-      createdDate: renderDate(item.createdDate),
-      isActive: renderActiveTag(item.isActive),
-      status: renderStatusTag(item.status),
-      isVerified: item.status === "verified",
-    }));
+  return data?.slice().map((item) => ({
+    key: item.id,
+    id: item.id,
+    domainUrl: item.domain,
+    domain: renderDomainUrlTag(item.isActive, item.domain),
+    createdDate: renderDate(item.createdDate),
+    isActive: renderActiveTag(item.isActive),
+    status: renderStatusTag(item.status),
+    isVerified: item.status === "verified",
+  }));
 };
 
 const renderDate = (timeStamp: number) => {
