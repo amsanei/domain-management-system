@@ -37,7 +37,7 @@ export default function DomainForm({
           },
         ]}
       >
-        <Input placeholder="EX: amsanei.github.io" />
+        <Input placeholder="EX: https://amsanei.github.io" />
       </Form.Item>
       <Form.Item label="Active Status" name="isActive" valuePropName="checked">
         <Switch checkedChildren="Active" unCheckedChildren="InActive" />

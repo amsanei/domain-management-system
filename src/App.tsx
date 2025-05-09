@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
-import DomainsList from "./components/DomainsList";
 import AppLayout from "./components/layout/AppLayout";
 import { ConfigProvider, theme } from "antd";
 import { RootState } from "./state/store";
+import DomainsPage from "./pages/Domains";
 
 function App() {
   const appTheme = useSelector((state: RootState) => state.theme);
@@ -14,7 +14,7 @@ function App() {
       }}
     >
       <AppLayout className={appTheme.value}>
-        <DomainsList />
+        <DomainsPage />
       </AppLayout>
     </ConfigProvider>
   );

@@ -1,13 +1,14 @@
 import { Button, Drawer, FormProps } from "antd";
-import useCreateNotification from "../hooks/useCreateNotification";
-import DomainForm from "./DomainForm";
-import { useCreateDomainMutation } from "../state/domains/domainsApiSlice";
 import { useEffect, useState } from "react";
+import { useCreateDomainMutation } from "../../state/domains/domainsApiSlice";
+import useCreateNotification from "../../hooks/useCreateNotification";
+import DomainForm from "../../components/forms/DomainForm";
 
-export default function CreateDomain({ callBack }: { callBack: () => void }) {
+export default function Create({ callBack }: { callBack: () => void }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { notify, contextHolder } = useCreateNotification();
-  const [createDomain, { isSuccess, isLoading }] = useCreateDomainMutation();
+  const [createDomain, { isSuccess, isLoading, isError }] =
+    useCreateDomainMutation();
 
   type FieldType = {
     domain: string;
@@ -26,6 +27,16 @@ export default function CreateDomain({ callBack }: { callBack: () => void }) {
       setIsDrawerOpen(false);
     }
   }, [isSuccess]);
+  
+  useEffect(() => {
+    if (isError) {
+      notify({
+        type: "error",
+        message: "Error!",
+        description: "Something went wrong! please try again later.",
+      });
+    }
+  }, [isError]);
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     createDomain(values);

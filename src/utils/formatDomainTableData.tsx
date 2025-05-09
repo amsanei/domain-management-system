@@ -1,35 +1,39 @@
 import { Domain } from "../types";
-import {  LinkOutlined } from "@ant-design/icons";
+import { LinkOutlined } from "@ant-design/icons";
 import { Typography, Tooltip, Tag } from "antd";
 import StatusIndicator from "../components/ui/StatusIndicator";
 
 export const formatDomainTableData = (data: Domain[]) => {
-  return data
-    ?.slice()
-    .sort(
-      (a, b) =>
-        new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
-    )
-    .map((item) => ({
-      key: item.id,
-      id: item.id,
-      domin: renderDomainUrlTag(item.isActive, item.domain),
-      createdDate: new Date(item.createdDate).toLocaleString(),
-      isActive: renderActiveTag(item.isActive),
-      status: renderStatusTag(item.status),
-    }));
+  return data?.slice().map((item) => ({
+    key: item.id,
+    id: item.id,
+    domainUrl: item.domain,
+    domain: renderDomainUrlTag(item.isActive, item.domain),
+    createdDate: renderDate(item.createdDate),
+    isActive: renderActiveTag(item.isActive),
+    status: renderStatusTag(item.status),
+    isVerified: item.status === "verified",
+  }));
+};
+
+const renderDate = (timeStamp: number) => {
+  const date = new Date(Number(timeStamp)).toLocaleString();
+  if (date === "Invalid Date") return "-";
+  return date;
 };
 
 const renderDomainUrlTag = (isActive: boolean, domain: string) => {
-  return <div className="flex gap-1 items-baseline">
-    <StatusIndicator isActive={isActive} />
-    <span>{domain}</span>
-    <Tooltip title="Open URL">
-      <Typography.Link type="secondary" href={domain} target="_blank">
-        <LinkOutlined />
-      </Typography.Link>
-    </Tooltip>
-  </div>;
+  return (
+    <div className="flex gap-1 items-baseline">
+      <StatusIndicator isActive={isActive} />
+      <span>{domain}</span>
+      <Tooltip title="Open URL">
+        <Typography.Link type="secondary" href={domain} target="_blank">
+          <LinkOutlined />
+        </Typography.Link>
+      </Tooltip>
+    </div>
+  );
 };
 
 const renderActiveTag = (isActive: boolean) =>
