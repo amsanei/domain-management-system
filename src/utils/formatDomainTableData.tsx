@@ -40,7 +40,7 @@ const renderActiveTag = (isActive: boolean) => {
   return isActive.toString() === "true" ? (
     <Tag color="success">Active</Tag>
   ) : (
-    <Tag color="default">Not Active</Tag>
+    <Tag color="default">Inactive</Tag>
   );
 };
 

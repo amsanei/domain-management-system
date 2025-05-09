@@ -14,7 +14,7 @@ export default function StatusIndicator({ isActive }: { isActive: boolean }) {
       </Tooltip>
     );
   return (
-    <Tooltip title="Not Active">
+    <Tooltip title="Inactive">
       <span className="size-2 bg-neutral-400 rounded-full"></span>
     </Tooltip>
   );

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Domain } from "../../types";
+import { Domain, DomainFormFieldType } from "../../types";
 
 export const domainsApiSlice = createApi({
   reducerPath: "domains",
@@ -30,7 +30,7 @@ export const domainsApiSlice = createApi({
         }),
       }),
       updateDomain: builder.mutation({
-        query: ({ domainId, newData }: { domainId: number; newData: any }) => ({
+        query: ({ domainId, newData }: { domainId: number; newData: DomainFormFieldType }) => ({
           url: "/domain/" + domainId,
           method: "PUT",
           headers: {

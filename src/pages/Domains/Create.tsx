@@ -3,18 +3,13 @@ import { useEffect, useState } from "react";
 import { useCreateDomainMutation } from "../../state/domains/domainsApiSlice";
 import useCreateNotification from "../../hooks/useCreateNotification";
 import DomainForm from "../../components/forms/DomainForm";
+import { DomainFormFieldType } from "../../types";
 
 export default function Create({ callBack }: { callBack: () => void }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { notify, contextHolder } = useCreateNotification();
   const [createDomain, { isSuccess, isLoading, isError }] =
     useCreateDomainMutation();
-
-  type FieldType = {
-    domain: string;
-    isActive: boolean;
-    status: string;
-  };
 
   useEffect(() => {
     if (isSuccess) {
@@ -27,7 +22,7 @@ export default function Create({ callBack }: { callBack: () => void }) {
       setIsDrawerOpen(false);
     }
   }, [isSuccess]);
-  
+
   useEffect(() => {
     if (isError) {
       notify({
@@ -38,7 +33,9 @@ export default function Create({ callBack }: { callBack: () => void }) {
     }
   }, [isError]);
 
-  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+  const onFinish: FormProps<DomainFormFieldType>["onFinish"] = async (
+    values
+  ) => {
     createDomain(values);
   };
 
