@@ -17,7 +17,7 @@ export const formatDomainTableData = (data: Domain[]) => {
 };
 
 const renderDate = (timeStamp: number) => {
-  const date = new Date(Number(timeStamp)).toLocaleString();
+  const date = new Date(Number(timeStamp) * 1000 ).toLocaleString();
   if (date === "Invalid Date") return "-";
   return date;
 };
