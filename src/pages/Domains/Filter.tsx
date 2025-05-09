@@ -1,5 +1,5 @@
 import { FilterFilled } from "@ant-design/icons";
-import { Button, Checkbox, Drawer, Form, FormProps } from "antd";
+import { Badge, Button, Checkbox, Drawer, Form, FormProps } from "antd";
 import { useState } from "react";
 import { Domain } from "../../types";
 import { useGetDomainsQuery } from "../../state/domains/domainsApiSlice";
@@ -10,7 +10,7 @@ export default function Filter({
   callBack: (data: Domain[]) => void;
 }) {
   const { data } = useGetDomainsQuery();
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+  const [filtersCount, setFiltersCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   type FieldType = {
     isActive: string[];
@@ -28,23 +28,22 @@ export default function Filter({
       return matchesActive && matchesStatus;
     });
     if (filteredData) callBack(filteredData);
+    setFiltersCount(values.status.length + values.isActive.length);
+
     setIsOpen(false);
   };
 
-  const onValuesChange = (_: any, values: FieldType) => {
-    const isEmpty = values.isActive.length === 0 && values.status.length === 0;
-    setIsSubmitDisabled(isEmpty);
-  };
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>
-        <FilterFilled />
-      </Button>
+      <Badge count={filtersCount} color="blue">
+        <Button onClick={() => setIsOpen(true)}>
+          <FilterFilled />
+        </Button>
+      </Badge>
       <Drawer title="Filters" open={isOpen} onClose={() => setIsOpen(false)}>
         <Form
           onFinish={onFinish}
           layout="vertical"
-          onValuesChange={onValuesChange}
           initialValues={{
             isActive: [],
             status: [],
@@ -68,11 +67,7 @@ export default function Filter({
             />
           </Form.Item>
           <Form.Item label={null}>
-            <Button
-              type="primary"
-              htmlType="submit"
-              disabled={isSubmitDisabled}
-            >
+            <Button type="primary" htmlType="submit">
               Submit
             </Button>
           </Form.Item>
