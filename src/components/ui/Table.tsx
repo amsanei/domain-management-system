@@ -2,8 +2,6 @@ import { Table } from "antd";
 import { useState } from "react";
 
 export default function DataTable({ isLoading, dataSource, columns }: any) {
-  console.log('here');
-  
   const [tablePagination, setTablePagination] = useState({
     current: 1,
     pageSize: 10,

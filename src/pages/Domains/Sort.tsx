@@ -43,8 +43,6 @@ export default function Sort({
         })
         .reverse();
     }
-    console.log(sortedData);
-    
     if (sortedData) callBack(sortedData);
   };
   return (
