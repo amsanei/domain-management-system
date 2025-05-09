@@ -36,12 +36,13 @@ const renderDomainUrlTag = (isActive: boolean, domain: string) => {
   );
 };
 
-const renderActiveTag = (isActive: boolean) =>
-  isActive ? (
+const renderActiveTag = (isActive: boolean) => {
+  return isActive.toString() === "true" ? (
     <Tag color="success">Active</Tag>
   ) : (
     <Tag color="default">Not Active</Tag>
   );
+};
 
 const renderStatusTag = (status: string) => {
   const color =
