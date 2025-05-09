@@ -38,8 +38,7 @@ export default function Sort({
         ?.slice()
         .sort((a, b) => {
           return (
-            new Date(b.createdDate).getTime() -
-            new Date(a.createdDate).getTime()
+            Number(b.createdDate) - Number(a.createdDate)
           );
         })
         .reverse();

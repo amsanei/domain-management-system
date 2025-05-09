@@ -98,7 +98,7 @@ export default function DomainsPage() {
 
   useEffect(() => {
     if (domains) {
-      formatData(domains);
+      formatData(domains.slice().sort((a,b) => Number(b.createdDate) - Number(a.createdDate) ));
     }
   }, [domains]);
 
