@@ -1,32 +1,25 @@
 import { Input } from "antd";
 import { useEffect, useState } from "react";
-import { Domain } from "../../types";
-import { useGetDomainsQuery } from "../../state/domains/domainsApiSlice";
 
 export default function Search({
-  callBack,
+  setTerm,
 }: {
-  callBack: (data: Domain[]) => void;
+  setTerm: React.Dispatch<React.SetStateAction<string>>;
 }) {
-  const { data } = useGetDomainsQuery();
-  const [term, setTerm] = useState("");
+  const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      const results = searchData();
-      if (results) callBack(results);
+      setTerm(inputValue);
     }, 300);
     return () => clearTimeout(timeoutId);
-  }, [term]);
+  }, [inputValue]);
 
-  const searchData = () => {
-    return data?.filter((item: Domain) => item.domain.includes(term));
-  };
   return (
     <Input.Search
       placeholder="EX: amsanei.github.io"
-      value={term}
-      onChange={(e) => setTerm(e.target.value)}
+      value={inputValue}
+      onChange={(e) => setInputValue(e.target.value)}
     />
   );
 }

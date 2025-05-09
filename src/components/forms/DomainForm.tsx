@@ -1,10 +1,15 @@
 import { Button, Input, Switch, Form, Select } from "antd";
+import { DomainFormFieldType } from "../../types";
 
 export default function DomainForm({
   initialValues,
   onFinish,
   isPending,
-}: any) {
+}: {
+  initialValues?: DomainFormFieldType;
+  onFinish: (values:DomainFormFieldType) => void;
+  isPending: boolean;
+}) {
   return (
     <Form
       layout="vertical"

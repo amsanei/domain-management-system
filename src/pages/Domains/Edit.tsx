@@ -9,11 +9,8 @@ import {
 import { EditOutlined, LoadingOutlined } from "@ant-design/icons";
 import ErrorBox from "../../components/layout/ErrorBox";
 import DomainForm from "../../components/forms/DomainForm";
-type FieldType = {
-  domain: string;
-  isActive: boolean;
-  status: string;
-};
+import { DomainFormFieldType } from "../../types";
+
 export default function Edit({
   domainId,
   callBack,
@@ -62,7 +59,7 @@ export default function Edit({
     }
   }, [isUpdateError]);
 
-  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+  const onFinish: FormProps<DomainFormFieldType>["onFinish"] = async (values) => {
     updateDomain({ domainId: domainId, newData: values });
   };
 

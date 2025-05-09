@@ -1,56 +1,22 @@
 import { Select } from "antd";
-import { Domain } from "../../types";
-import { useGetDomainsQuery } from "../../state/domains/domainsApiSlice";
+import React from "react";
 
 export default function Sort({
-  callBack,
+  setSortMethod,
 }: {
-  callBack: (data: Domain[]) => void;
+  setSortMethod: React.Dispatch<
+    React.SetStateAction<string>
+  >;
 }) {
-  const { data } = useGetDomainsQuery();
   const handleSorting = (e: string) => {
-
-    let sortedData: Domain[] | undefined;
-    if (e === "alphabet") {
-      sortedData = data?.slice().sort((a, b) => {
-        const titleA = a.domain.toLowerCase();
-        const titleB = b.domain.toLowerCase();
-        return titleA.localeCompare(titleB);
-      });
-      
-    } else if (e === "reverseAlphabet") {
-      sortedData = data
-        ?.slice()
-        .sort((a, b) => {
-          const titleA = a.domain.toLowerCase();
-          const titleB = b.domain.toLowerCase();
-          return titleA.localeCompare(titleB);
-        })
-        .reverse();
-    } else if (e === "latest") {
-      sortedData = data?.slice().sort((a, b) => {
-        return (
-           Number(b.createdDate) - Number(a.createdDate)
-        );
-      });
-    } else if (e === "oldest") {
-      sortedData = data
-        ?.slice()
-        .sort((a, b) => {
-          return (
-            Number(b.createdDate) - Number(a.createdDate)
-          );
-        })
-        .reverse();
-    }
-    if (sortedData) callBack(sortedData);
+    setSortMethod(e);
   };
   return (
     <Select
       placeholder="Select sorting method"
       onChange={handleSorting}
       defaultValue="latest"
-      style={{minWidth: "180px"}}
+      style={{ minWidth: "180px" }}
       options={[
         { label: "Sort By (A-Z)", value: "alphabet" },
         { label: "Sort By (Z-A)", value: "reverseAlphabet" },
