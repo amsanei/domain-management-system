@@ -12,10 +12,13 @@ export default function SearchDomain({
 }) {
   const { data } = useGetDomainsQuery();
   const [term, setTerm] = useState("");
+
   useEffect(() => {
-    const results = searchData()
-    if(results)
-      callBack(results);
+    const timeoutId = setTimeout(() => {
+      const results = searchData();
+      if (results) callBack(results);
+    }, 300);
+    return () => clearTimeout(timeoutId);
   }, [term]);
 
   const searchData = () => {
