@@ -28,7 +28,7 @@ export default function Sort({
     } else if (e === "latest") {
       sortedData = data?.slice().sort((a, b) => {
         return (
-          new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
+           Number(b.createdDate) - Number(a.createdDate)
         );
       });
     } else if (e === "oldest") {
@@ -49,11 +49,12 @@ export default function Sort({
       placeholder="Select sorting method"
       onChange={handleSorting}
       defaultValue="latest"
+      style={{minWidth: "180px"}}
       options={[
         { label: "Sort By (A-Z)", value: "alphabet" },
         { label: "Sort By (Z-A)", value: "reverseAlphabet" },
-        { label: "Sort Bay (Latest)", value: "latest" },
-        { label: "Sort Bay (Oldest)", value: "oldest" },
+        { label: "Sort By (Latest)", value: "latest" },
+        { label: "Sort By (Oldest)", value: "oldest" },
       ]}
     />
   );

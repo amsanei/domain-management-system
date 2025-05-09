@@ -6,20 +6,23 @@ import StatusIndicator from "../components/ui/StatusIndicator";
 export const formatDomainTableData = (data: Domain[]) => {
   return data
     ?.slice()
-    .sort(
-      (a, b) =>
-        new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
-    )
+    .sort((a, b) => Number(b.createdDate) - Number(a.createdDate))
     .map((item) => ({
       key: item.id,
       id: item.id,
       domainUrl: item.domain,
       domain: renderDomainUrlTag(item.isActive, item.domain),
-      createdDate: new Date(item.createdDate).toLocaleString(),
+      createdDate: renderDate(item.createdDate),
       isActive: renderActiveTag(item.isActive),
       status: renderStatusTag(item.status),
       isVerified: item.status === "verified",
     }));
+};
+
+const renderDate = (timeStamp: number) => {
+  const date = new Date(Number(timeStamp)).toLocaleString();
+  if (date === "Invalid Date") return "-";
+  return date;
 };
 
 const renderDomainUrlTag = (isActive: boolean, domain: string) => {

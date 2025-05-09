@@ -38,7 +38,7 @@ export default function EditDomain({ domainId, callBack }: any) {
       notify({
         type: "success",
         message: "Success!",
-        description: "You edited it.",
+        description: "The domain has been successfully updated.",
       });
       setIsDrawerOpen(false);
       callBack();
