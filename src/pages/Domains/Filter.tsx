@@ -1,15 +1,17 @@
 import { FilterFilled } from "@ant-design/icons";
 import { Badge, Button, Checkbox, Drawer, Form, FormProps } from "antd";
 import { useState } from "react";
-import { Domain } from "../../types";
-import { useGetDomainsQuery } from "../../state/domains/domainsApiSlice";
 
 export default function Filter({
-  callBack,
+  setFilters,
 }: {
-  callBack: (data: Domain[]) => void;
+  setFilters: React.Dispatch<
+    React.SetStateAction<{
+      isActive: string[];
+      status: string[];
+    }>
+  >;
 }) {
-  const { data } = useGetDomainsQuery();
   const [filtersCount, setFiltersCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   type FieldType = {
@@ -17,19 +19,8 @@ export default function Filter({
     status: string[];
   };
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
-    const filteredData = data?.filter((item: Domain) => {
-      const matchesActive =
-        values.isActive?.length === 0 ||
-        values.isActive.includes(item.isActive.toString());
-
-      const matchesStatus =
-        values.status?.length === 0 || values.status.includes(item.status);
-
-      return matchesActive && matchesStatus;
-    });
-    if (filteredData) callBack(filteredData);
+    setFilters(values);
     setFiltersCount(values.status.length + values.isActive.length);
-
     setIsOpen(false);
   };
 

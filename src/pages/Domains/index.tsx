@@ -13,6 +13,9 @@ import ErrorBox from "../../components/layout/ErrorBox";
 import DataTable from "../../components/ui/Table";
 import Destroy from "./Destroy";
 import Edit from "./Edit";
+import sortData from "../../utils/sortData";
+import filterData from "../../utils/filterData";
+import searchData from "../../utils/searchData";
 
 const { Text } = Typography;
 
@@ -25,7 +28,15 @@ export default function DomainsPage() {
     isFetching,
   } = useGetDomainsQuery();
   const [tableData, setTableData] = useState<any>([]);
-
+  const [filters, setFilters] = useState<{
+    isActive: string[];
+    status: string[];
+  }>({
+    isActive: [],
+    status: [],
+  });
+  const [sortMethod, setSortMethod] = useState("latest");
+  const [searchTerm, setSearchTerm] = useState("");
   const formatData = (data: Domain[]) => {
     const newTableData = formatDomainTableData(data);
     setTableData(newTableData);
@@ -98,9 +109,12 @@ export default function DomainsPage() {
 
   useEffect(() => {
     if (domains) {
-      formatData(domains.slice().sort((a,b) => Number(b.createdDate) - Number(a.createdDate) ));
+      let result = filterData(filters, domains);
+      result = sortData(sortMethod, result);
+      result = searchData(searchTerm, result);
+      formatData(result);
     }
-  }, [domains]);
+  }, [domains, filters, sortMethod, searchTerm]);
 
   return (
     <div>
@@ -108,9 +122,9 @@ export default function DomainsPage() {
         <Text style={{ fontSize: "1.5rem" }}>Domains</Text>
         {!isError && (
           <div className="flex flex-wrap md:flex-nowrap gap-4 items-center">
-            <Search callBack={formatData} />
-            <Sort callBack={formatData} />
-            <Filter callBack={formatData} />
+            <Search setTerm={setSearchTerm} />
+            <Sort setSortMethod={setSortMethod} />
+            <Filter setFilters={setFilters} />
             <Create callBack={refetch} />
           </div>
         )}
